@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Indian Devotional Songs</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(to bottom, #ffecd2, #fcb69f);
+        margin: 0;
+        padding: 0;
+    }
+    header {
+        background-color: #d97706;
+        color: white;
+        text-align: center;
+        padding: 20px;
+        font-size: 24px;
+        font-weight: bold;
+    }
+    .songs-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 15px;
+        padding: 20px;
+    }
+    .song {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        transition: transform 0.3s;
+    }
+    .song:hover {
+        transform: scale(1.03);
+    }
+    iframe {
+        width: 100%;
+        height: 200px;
+        border: none;
+    }
+    .title {
+        padding: 10px;
+        font-weight: bold;
+        text-align: center;
+        background-color: #f3f4f6;
+    }
+</style>
+</head>
+<body>
+<header>🙏 Indian Devotional Songs 🙏</header>
+<div class="songs-container" id="songs-container">
+    <!-- Songs will load here -->
+</div>
+
+<script>
+const API_KEY = "YOUR_YOUTUBE_API_KEY"; // Yahan apna YouTube API key daalna
+const SEARCH_QUERY = "Indian devotional songs";
+const MAX_RESULTS = 6;
+
+fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${SEARCH_QUERY}&type=video&maxResults=${MAX_RESULTS}&key=${API_KEY}`)
+.then(response => response.json())
+.then(data => {
+    let songsContainer = document.getElementById("songs-container");
+    data.items.forEach(item => {
+        let videoId = item.id.videoId;
+        let title = item.snippet.title;
+        songsContainer.innerHTML += `
+            <div class="song">
+                <iframe src="https://www.youtube.com/embed/${videoId}" allowfullscreen></iframe>
+                <div class="title">${title}</div>
+            </div>
+        `;
+    });
+})
+.catch(error => console.error("Error fetching songs:", error));
+</script>
+
+</body>
+</html>
